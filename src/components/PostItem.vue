@@ -1,7 +1,12 @@
 <template>
   <div class="post">
-    <div><strong>Title:</strong> {{ post.title }}</div>
-    <div><strong>Desc:</strong> {{ post.body }}</div>
+    <div>
+      <div><strong>Title:</strong> {{ post.title }}</div>
+      <div><strong>Desc:</strong> {{ post.body }}</div>
+    </div>
+    <div class="post__btns">
+      <my-button>Delete</my-button>
+    </div>
   </div>
 </template>
 
@@ -18,6 +23,9 @@ export default {
 
 <style scoped>
 .post {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 10px;
   padding: 15px;
   border: 2px solid aqua;
