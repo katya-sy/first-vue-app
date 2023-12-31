@@ -5,7 +5,8 @@
     <my-modal v-model:show="modalVisible">
       <post-form @create="createPost" />
     </my-modal>
-    <post-list :posts="posts" @remove="removePost" />
+    <post-list :posts="posts" @remove="removePost" v-if="!isPostLoading" />
+    <div v-else>Loading...</div>
   </div>
 </template>
 
@@ -13,6 +14,7 @@
 import PostList from "./components/PostList.vue";
 import PostForm from "./components/PostForm.vue";
 import MyButton from "./components/UI/MyButton.vue";
+import axios from "axios";
 export default {
   components: {
     PostList,
@@ -21,15 +23,11 @@ export default {
   },
   data() {
     return {
-      posts: [
-        { id: 1, title: "Jsjsjs", body: "Js js js js js js" },
-        { id: 2, title: "Ararar", body: "Js js js js js js" },
-        { id: 3, title: "Upupu", body: "Js js js js js js" },
-      ],
+      posts: [],
       modalVisible: false,
+      isPostLoading: false,
     };
   },
-
   methods: {
     createPost(post) {
       this.posts.push(post);
@@ -41,6 +39,22 @@ export default {
     showModal() {
       this.modalVisible = true;
     },
+    async fetchPosts() {
+      try {
+        this.isPostLoading = true;
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+        );
+        this.posts = response.data;
+      } catch (error) {
+        alert(`Error: ${error}`);
+      } finally {
+        this.isPostLoading = false;
+      }
+    },
+  },
+  mounted() {
+    this.fetchPosts();
   },
 };
 </script>
