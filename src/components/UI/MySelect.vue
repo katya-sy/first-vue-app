@@ -28,9 +28,7 @@ export default {
 </script>
 
 <style scoped>
-.input {
-  width: 100%;
-  margin-top: 10px;
+select {
   padding: 10px 15px;
   border: 1px solid aqua;
 }
