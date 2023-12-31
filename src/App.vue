@@ -1,11 +1,18 @@
 <template>
   <div class="app">
     <h1>Posts</h1>
-    <my-button @click="showModal" style="margin: 15px 0">Create post</my-button>
+    <div class="app__btns">
+      <my-button @click="showModal">Create post</my-button>
+      <my-select v-model="selectedSort" :options="sortOptions" />
+    </div>
     <my-modal v-model:show="modalVisible">
       <post-form @create="createPost" />
     </my-modal>
-    <post-list :posts="posts" @remove="removePost" v-if="!isPostLoading" />
+    <post-list
+      :posts="sortedPosts"
+      @remove="removePost"
+      v-if="!isPostLoading"
+    />
     <div v-else>Loading...</div>
   </div>
 </template>
@@ -26,6 +33,11 @@ export default {
       posts: [],
       modalVisible: false,
       isPostLoading: false,
+      selectedSort: "",
+      sortOptions: [
+        { value: "title", name: "By title" },
+        { value: "body", name: "By description" },
+      ],
     };
   },
   methods: {
@@ -56,6 +68,13 @@ export default {
   mounted() {
     this.fetchPosts();
   },
+  computed: {
+    sortedPosts() {
+      return [...this.posts].sort((post1, post2) =>
+        post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+      );
+    },
+  },
 };
 </script>
 
@@ -69,5 +88,10 @@ export default {
   margin: 0 auto;
   max-width: 1000px;
   padding: 20px;
+}
+.app__btns {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
 }
 </style>
