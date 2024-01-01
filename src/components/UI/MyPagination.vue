@@ -24,12 +24,7 @@ export default {
       default: 1,
     },
   },
-  methods: {
-    // changePage(pageNumber) {
-    //   console.log(pageNumber);
-    //   this.$emit("click", pageNumber);
-    // },
-  },
+  methods: {},
 };
 </script>
 

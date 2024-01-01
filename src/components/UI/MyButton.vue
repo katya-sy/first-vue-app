@@ -16,5 +16,6 @@ export default {
   background: none;
   border: 1px solid aqua;
   color: #000;
+  cursor: pointer;
 }
 </style>
