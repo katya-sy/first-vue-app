@@ -1,5 +1,6 @@
 import Main from "../pages/Main.vue";
 import PostPage from "../pages/PostPage.vue";
+import PostIdPage from "../pages/PostIdPage.vue";
 import About from "../pages/About.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -15,6 +16,10 @@ const routes = [
   {
     path: "/about",
     component: About,
+  },
+  {
+    path: "/posts/:id",
+    component: PostIdPage,
   },
 ];
 
