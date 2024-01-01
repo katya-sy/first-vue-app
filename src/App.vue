@@ -15,6 +15,11 @@
       v-if="!isPostLoading"
     />
     <div v-else>Loading...</div>
+    <my-pagination
+      @changePage="changePage"
+      :page="page"
+      :pages="totalPages"
+    ></my-pagination>
   </div>
 </template>
 
@@ -23,11 +28,13 @@ import PostList from "./components/PostList.vue";
 import PostForm from "./components/PostForm.vue";
 import MyButton from "./components/UI/MyButton.vue";
 import axios from "axios";
+import MyPagination from "./components/UI/MyPagination.vue";
 export default {
   components: {
     PostList,
     PostForm,
     MyButton,
+    MyPagination,
   },
   data() {
     return {
@@ -40,6 +47,9 @@ export default {
         { value: "body", name: "By description" },
       ],
       searchQuery: "",
+      page: 1,
+      limit: 10,
+      totalPages: 0,
     };
   },
   methods: {
@@ -57,7 +67,16 @@ export default {
       try {
         this.isPostLoading = true;
         const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          }
+        );
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.limit
         );
         this.posts = response.data;
       } catch (error) {
@@ -65,6 +84,9 @@ export default {
       } finally {
         this.isPostLoading = false;
       }
+    },
+    changePage(pageNumber) {
+      this.page = pageNumber;
     },
   },
   mounted() {
@@ -80,6 +102,11 @@ export default {
       return this.sortedPosts.filter((post) =>
         post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
+    },
+  },
+  watch: {
+    page() {
+      this.fetchPosts();
     },
   },
 };
